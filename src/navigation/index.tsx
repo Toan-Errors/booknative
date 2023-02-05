@@ -33,6 +33,8 @@ import {
 } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
 import SingleBook from "../components/Book/SingleBook";
+import ProfileScreen from "../screens/ProfileScreen";
+import AuthScreen from "../screens/AuthScreen";
 
 export default function Navigation({
   colorScheme,
@@ -66,6 +68,11 @@ function RootNavigator() {
       <Stack.Screen
         name="SingleBook"
         component={SingleBook}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Auth"
+        component={AuthScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen
@@ -112,6 +119,15 @@ function BottomTabNavigator() {
         options={{
           title: "Browse",
           tabBarIcon: ({ color }) => <TabBarIcon name="book" color={color} />,
+        }}
+      />
+
+      <BottomTab.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{
+          title: "Profile",
+          tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
         }}
       />
     </BottomTab.Navigator>
