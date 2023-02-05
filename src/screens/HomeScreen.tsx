@@ -50,14 +50,20 @@ export default function HomeScreen() {
             ]}
           />
           <ListBook
-            title="Tiểu sử - Hồi ức"
-            books={[
-              { title: "Book 1", author: "Author 1" },
-              { title: "Book 2", author: "Author 2" },
-              { title: "Book 3", author: "Author 3" },
-              { title: "Book 3", author: "Author 3" },
-              { title: "Book 3", author: "Author 3" },
-            ]}
+            title="Fantasy"
+            books={books.filter((book) => book.genres.includes("Fantasy"))}
+          />
+          <ListBook
+            title="Comedy"
+            books={books.filter((book) => book.genres.includes("Comedy"))}
+          />
+          <ListBook
+            title="Adventure"
+            books={books.filter((book) => book.genres.includes("Adventure"))}
+          />
+          <ListBook
+            title="Action"
+            books={books.filter((book) => book.genres.includes("Action"))}
           />
           <Text>HomeScreen</Text>
         </View>

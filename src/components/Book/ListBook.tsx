@@ -8,9 +8,10 @@ import {
 import React, { useState } from "react";
 import Book from "./Book";
 import { useNavigation } from "@react-navigation/native";
+import { BookState } from "../../types/book/book-type";
 
 interface Props {
-  books: any;
+  books: BookState[];
   title: string;
 }
 
@@ -24,13 +25,13 @@ const ListBook: React.FC<Props> = ({ books, title }) => {
         renderItem={({ item, index }) => (
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate("SingleBook", { book: item });
+              navigation.navigate("SingleBook", { id: item._id });
             }}
           >
             <Book key={index} book={item} />
           </TouchableOpacity>
         )}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item._id}
         numColumns={1}
         horizontal={true}
         showsHorizontalScrollIndicator={false}

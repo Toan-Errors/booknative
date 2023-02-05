@@ -32,8 +32,6 @@ import {
   RootTabScreenProps,
 } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
-import { useState, useEffect } from "react";
-import { useNavigation } from "@react-navigation/native";
 import SingleBook from "../components/Book/SingleBook";
 
 export default function Navigation({

@@ -1,1 +1,1 @@
-export const HOST_API = "https://api.itbook.store/1.0";
+export const HOST_API = "http://192.168.1.124:3000";
