@@ -1,4 +1,10 @@
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  SafeAreaView,
+} from "react-native";
 import React from "react";
 import NotLogin from "./NotLogin";
 import { useAppSelector } from "../../../hooks/useAppDispatch";
@@ -11,7 +17,7 @@ const AuthProfile = ({}: AuthProfileProps) => {
 
   return (
     <View style={styles.container}>
-      {user ? <Logged user={user} /> : <NotLogin />}
+      <View>{user ? <Logged user={user} /> : <NotLogin />}</View>
     </View>
   );
 };

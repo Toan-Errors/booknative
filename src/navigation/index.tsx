@@ -30,11 +30,18 @@ import {
   RootStackParamList,
   RootTabParamList,
   RootTabScreenProps,
+  SettingsParamList,
 } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
 import SingleBook from "../components/Book/SingleBook";
 import ProfileScreen from "../screens/ProfileScreen";
 import AuthScreen from "../screens/AuthScreen";
+import ProfileSetting from "../components/Settings/ProfileSetting";
+import OrderSetting from "../components/Settings/OrderSetting";
+import AddressSetting from "../components/Settings/AddressSetting";
+import FavoriteSetting from "../components/Settings/FavoriteSetting";
+import ReviewSetting from "../components/Settings/ReviewSetting";
+import ChangePassword from "../components/Settings/ChangePassword";
 
 export default function Navigation({
   colorScheme,
@@ -63,6 +70,11 @@ function RootNavigator() {
       <Stack.Screen
         name="Root"
         component={BottomTabNavigator}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Settings"
+        component={SettingNavigator}
         options={{ headerShown: false }}
       />
       <Stack.Screen
@@ -128,6 +140,7 @@ function BottomTabNavigator() {
         options={{
           title: "Profile",
           tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
+          headerShown: false,
         }}
       />
     </BottomTab.Navigator>
@@ -142,4 +155,53 @@ export function TabBarIcon(props: {
   color: string;
 }) {
   return <FontAwesome size={30} style={{ marginBottom: -3 }} {...props} />;
+}
+
+const Setting = createNativeStackNavigator<SettingsParamList>();
+
+export function SettingNavigator() {
+  return (
+    <Setting.Navigator>
+      <Setting.Screen
+        name="Settings"
+        component={ProfileSetting}
+        options={{ headerShown: false }}
+      />
+      <Setting.Screen
+        name="Profile"
+        component={ProfileSetting}
+        options={{ title: "Profile" }}
+      />
+      <Setting.Screen
+        name="Order"
+        component={OrderSetting}
+        options={{ title: "Order" }}
+      />
+      <Setting.Screen
+        name="Favorite"
+        component={FavoriteSetting}
+        options={{ title: "Favorite" }}
+      />
+      <Setting.Screen
+        name="Review"
+        component={ReviewSetting}
+        options={{ title: "Review" }}
+      />
+      <Setting.Screen
+        name="Address"
+        component={AddressSetting}
+        options={{ title: "Address" }}
+      />
+      <Setting.Screen
+        name="ChangePassword"
+        component={ChangePassword}
+        options={{ title: "Change Password" }}
+      />
+      <Setting.Screen
+        name="NotFound"
+        component={NotFoundScreen}
+        options={{ title: "Oops!" }}
+      />
+    </Setting.Navigator>
+  );
 }

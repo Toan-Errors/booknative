@@ -10,6 +10,7 @@ export type UserState = {
   country: string;
   createdAt: string;
   updatedAt: string;
+  avatar: string;
 };
 
 export type LoginType = {

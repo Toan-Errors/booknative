@@ -1,29 +1,67 @@
-import { StyleSheet, Text, View, Pressable } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  SafeAreaView,
+  TouchableOpacity,
+  Image,
+} from "react-native";
 import React from "react";
 import { UserState } from "../../../types/auth/auth-type";
-import { useAppDispatch } from "../../../hooks/useAppDispatch";
-import { logout } from "../../../redux/auth/authSlice";
+import { Ionicons } from "@expo/vector-icons";
 
 interface LoggedProps {
   user: UserState;
 }
 
 const Logged = ({ user }: LoggedProps) => {
-  const dispatch = useAppDispatch();
-
-  const onLogout = () => {
-    dispatch(logout());
-  };
-
   return (
-    <View>
-      <Pressable onPress={onLogout}>
-        <Text>Logout</Text>
-      </Pressable>
-    </View>
+    <SafeAreaView>
+      <TouchableOpacity>
+        <View style={styles.container}>
+          {user?.avatar ? (
+            <Image
+              source={{ uri: user?.avatar }}
+              style={{
+                width: 60,
+                height: 60,
+                borderRadius: 30,
+                marginRight: 10,
+              }}
+            />
+          ) : (
+            <Ionicons
+              name="person-circle-outline"
+              size={60}
+              color="black"
+              style={{
+                alignSelf: "center",
+                marginRight: 10,
+              }}
+            />
+          )}
+          <Text style={styles.text}>
+            Xin chào {user.firstName + " " + user.lastName}
+          </Text>
+        </View>
+      </TouchableOpacity>
+    </SafeAreaView>
   );
 };
 
 export default Logged;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    paddingTop: 20,
+  },
+  text: {
+    color: "#000",
+    fontSize: 15,
+    fontWeight: "bold",
+    textAlign: "left",
+  },
+});

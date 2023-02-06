@@ -32,6 +32,17 @@ const linking: LinkingOptions<RootStackParamList> = {
           },
         },
       },
+      Auth: {
+        screens: {
+          Login: "login",
+          Register: "register",
+        },
+      },
+      Settings: {
+        screens: {
+          Profile: "profile",
+        },
+      },
       Modal: "modal",
       NotFound: "*",
     },

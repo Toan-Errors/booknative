@@ -34,10 +34,17 @@ export const authSlice = createSlice({
       state.error = null;
       state.loading = false;
     },
+    registerSuccess: (state, action: PayloadAction<any>) => {
+      state.user = action.payload.user;
+      AsyncStorage.setItem("accessToken", action.payload.accessToken);
+      state.error = null;
+      state.loading = false;
+    },
   },
 });
 
-export const { startLoading, hasError, loginSuccess } = authSlice.actions;
+export const { startLoading, hasError, loginSuccess, registerSuccess } =
+  authSlice.actions;
 export const selectUser = (state: any) => state.auth.user;
 export const selectAccessToken = (state: any) => state.auth.accessToken;
 export default authSlice.reducer;
@@ -51,16 +58,17 @@ export const login =
         password,
       });
       if (response.data.user) {
+        // console.log(response.data);
         dispatch(loginSuccess(response.data));
       } else {
         if (response.data.message) {
           dispatch(hasError(response.data.message));
         } else {
-          // dispatch(hasError("Something went wrong"));
+          dispatch(hasError("Something went wrong"));
         }
       }
     } catch (error) {
-      // dispatch(hasError("Something went wrong"));
+      dispatch(hasError("Something went wrong"));
     }
   };
 
@@ -68,18 +76,19 @@ export const register = (data: RegisterType) => async (dispatch: any) => {
   try {
     dispatch(startLoading());
     const response = await axiosInstance.post("/auth/register", data);
-    console.log(response);
-    if (response.data.user) {
-      dispatch(loginSuccess(response.data));
+    if (!response.data.user) {
+      dispatch(registerSuccess(response.data));
     } else {
       if (response.data.message) {
-        dispatch(hasError(response.data.message));
+        // console.log(response.data.messages);
+        dispatch(hasError("Email already exists"));
       } else {
-        // dispatch(hasError("Something went wrong"));
+        console.log(response.data);
+        dispatch(hasError("Something went wrong"));
       }
     }
   } catch (error) {
-    // dispatch(hasError("Something went wrong"));
+    dispatch(hasError("Something went wrong"));
   }
 };
 
@@ -97,7 +106,6 @@ export const authenticate = () => async (dispatch: any) => {
     dispatch(startLoading());
     const accessToken = await AsyncStorage.getItem("accessToken");
     if (accessToken === null) {
-      console.log("No access token");
       return;
     }
     axiosInstance.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
@@ -115,7 +123,7 @@ export const authenticate = () => async (dispatch: any) => {
       }
     }
   } catch (error) {
-    console.log(error);
-    // dispatch(hasError("Something went wrong"));
+    // console.log(error);
+    dispatch(hasError("Something went wrong"));
   }
 };

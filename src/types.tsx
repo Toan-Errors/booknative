@@ -18,6 +18,7 @@ declare global {
 
 export type RootStackParamList = {
   Root: NavigatorScreenParams<RootTabParamList> | undefined;
+  Settings: NavigatorScreenParams<SettingsParamList> | undefined;
   SingleBook: { id: string };
   Auth: undefined;
   Modal: undefined;
@@ -43,3 +44,22 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> =
     BottomTabScreenProps<RootTabParamList, Screen>,
     NativeStackScreenProps<RootStackParamList>
   >;
+
+export type SettingsParamList = {
+  Settings: undefined;
+  Profile: undefined;
+  Order: undefined;
+  Address: undefined;
+  Favorite: undefined;
+  Review: undefined;
+  Payment: undefined;
+  Notification: undefined;
+  Help: undefined;
+  About: undefined;
+  Contact: undefined;
+  Privacy: undefined;
+  Term: undefined;
+  Refund: undefined;
+  ChangePassword: undefined;
+  NotFound: undefined;
+};
