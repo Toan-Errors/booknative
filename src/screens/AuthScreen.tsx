@@ -7,6 +7,7 @@ import OtherAuth from "../components/Auth/OtherAuth";
 
 const AuthScreen = () => {
   const [tab, setTab] = React.useState<"login" | "register">("login");
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.logo}>

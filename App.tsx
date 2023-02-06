@@ -7,6 +7,7 @@ import useCachedResources from "./src/hooks/useCachedResources";
 import useColorScheme from "./src/hooks/useColorScheme";
 import Navigation from "./src/navigation";
 import { store } from "./src/redux/store";
+import AuthProvider from "./src/components/Auth/AuthProvider";
 
 export default function App() {
   const isLoadingComplete = useCachedResources();
@@ -18,6 +19,7 @@ export default function App() {
     return (
       <SafeAreaProvider>
         <Provider store={store}>
+          <AuthProvider />
           <Navigation colorScheme={colorScheme} />
           <StatusBar />
         </Provider>

@@ -6,14 +6,41 @@ import {
   Dimensions,
   ScrollView,
   TouchableOpacity,
+  Alert,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Ionicons } from "@expo/vector-icons";
+import { useAppDispatch, useAppSelector } from "../../../hooks/useAppDispatch";
+import { hasError, login } from "../../../redux/auth/authSlice";
+import { useNavigation } from "@react-navigation/native";
 
 const LoginForm = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [eye, setEye] = useState<boolean>(true);
+  const { error, user } = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
+  const navigation = useNavigation();
+
+  const onLogin = () => {
+    if (!email || !password) {
+      Alert.alert("Thông báo", "Vui lòng nhập đầy đủ thông tin");
+      return;
+    }
+    dispatch(login(email, password));
+  };
+
+  useEffect(() => {
+    if (error) {
+      Alert.alert("Thông báo", error);
+      dispatch(hasError(null));
+      return;
+    }
+
+    if (user) {
+      navigation.navigate("Root", { screen: "Home" });
+    }
+  }, [error, user]);
 
   return (
     <View style={styles.container}>
@@ -79,7 +106,7 @@ const LoginForm = () => {
           </TouchableOpacity>
         </View>
       </View>
-      <TouchableOpacity style={styles.loginBtn}>
+      <TouchableOpacity onPress={onLogin} style={styles.loginBtn}>
         <Text style={styles.loginText}>Login</Text>
       </TouchableOpacity>
     </View>

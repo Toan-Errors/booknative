@@ -3,11 +3,7 @@ import React from "react";
 import AuthProfile from "../components/Profile/AuthProfile";
 
 const ProfileScreen = () => {
-  return (
-    <View>
-      <AuthProfile />
-    </View>
-  );
+  return <AuthProfile />;
 };
 
 export default ProfileScreen;

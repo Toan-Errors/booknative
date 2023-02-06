@@ -6,9 +6,13 @@ import {
   Dimensions,
   ScrollView,
   TouchableOpacity,
+  Alert,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Ionicons } from "@expo/vector-icons";
+import { useAppDispatch, useAppSelector } from "../../../hooks/useAppDispatch";
+import { hasError, register } from "../../../redux/auth/authSlice";
+import { useNavigation } from "@react-navigation/native";
 
 const RegisterForm = () => {
   const [email, setEmail] = useState<string>("");
@@ -17,6 +21,38 @@ const RegisterForm = () => {
   const [lastName, setLastName] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
   const [eye, setEye] = useState<boolean>(true);
+
+  const { error, user } = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
+  const navigation = useNavigation();
+
+  const onRegister = () => {
+    if (!email || !password || !firstName || !lastName || !phone) {
+      Alert.alert("Thông báo", "Vui lòng nhập đầy đủ thông tin");
+      return;
+    }
+    const data = {
+      email,
+      password,
+      firstName,
+      lastName,
+      phone,
+    };
+
+    dispatch(register(data));
+  };
+
+  useEffect(() => {
+    if (error) {
+      Alert.alert("Thông báo", error);
+      dispatch(hasError(null));
+      return;
+    }
+
+    if (user) {
+      navigation.navigate("Root", { screen: "Home" });
+    }
+  }, [error, user]);
 
   return (
     <View style={styles.container}>
@@ -119,7 +155,7 @@ const RegisterForm = () => {
           />
         </View>
       </View>
-      <TouchableOpacity style={styles.loginBtn}>
+      <TouchableOpacity onPress={onRegister} style={styles.loginBtn}>
         <Text style={styles.loginText}>Đăng ký</Text>
       </TouchableOpacity>
     </View>
