@@ -40,11 +40,21 @@ export const authSlice = createSlice({
       state.error = null;
       state.loading = false;
     },
+    changeAvatarSuccess: (state, action: PayloadAction<any>) => {
+      state.user = action.payload;
+      state.error = null;
+      state.loading = false;
+    },
   },
 });
 
-export const { startLoading, hasError, loginSuccess, registerSuccess } =
-  authSlice.actions;
+export const {
+  startLoading,
+  hasError,
+  loginSuccess,
+  registerSuccess,
+  changeAvatarSuccess,
+} = authSlice.actions;
 export const selectUser = (state: any) => state.auth.user;
 export const selectAccessToken = (state: any) => state.auth.accessToken;
 export default authSlice.reducer;
@@ -124,6 +134,28 @@ export const authenticate = () => async (dispatch: any) => {
     }
   } catch (error) {
     // console.log(error);
+    dispatch(hasError("Something went wrong"));
+  }
+};
+
+export const changeAvatar = (avatar: string) => async (dispatch: any) => {
+  try {
+    console.log(avatar);
+    dispatch(startLoading());
+    const response = await axiosInstance.post("/user/change-avatar", {
+      avatar,
+    });
+    console.log(response.data);
+    if (response.data.user) {
+      dispatch(changeAvatarSuccess(response.data.user));
+    } else {
+      if (response.data.message) {
+        dispatch(hasError(response.data.message));
+      } else {
+        dispatch(hasError("Something went wrong"));
+      }
+    }
+  } catch (error) {
     dispatch(hasError("Something went wrong"));
   }
 };

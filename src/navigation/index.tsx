@@ -162,11 +162,11 @@ const Setting = createNativeStackNavigator<SettingsParamList>();
 export function SettingNavigator() {
   return (
     <Setting.Navigator>
-      <Setting.Screen
+      {/* <Setting.Screen
         name="Settings"
         component={ProfileSetting}
         options={{ headerShown: false }}
-      />
+      /> */}
       <Setting.Screen
         name="Profile"
         component={ProfileSetting}
