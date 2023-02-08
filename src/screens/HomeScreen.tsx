@@ -4,8 +4,9 @@ import {
   TouchableOpacity,
   SafeAreaView,
   ScrollView,
+  RefreshControl,
 } from "react-native";
-import React, { Component, useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import axiosInstance from "../utils/axios";
 import { useAppDispatch, useAppSelector } from "../hooks/useAppDispatch";
 import { fetchBooks } from "../redux/book/bookSlice";
@@ -15,8 +16,15 @@ import Menu from "../components/Menu";
 import ListBook from "../components/Book/ListBook";
 
 export default function HomeScreen() {
+  const [refeshing, setRefeshing] = React.useState(false);
   const dispatch = useAppDispatch();
   const { books } = useAppSelector((state) => state.book);
+
+  const onRefresh = useCallback(() => {
+    setRefeshing(true);
+    dispatch(fetchBooks());
+    setRefeshing(false);
+  }, []);
 
   useEffect(() => {
     dispatch(fetchBooks());
@@ -24,7 +32,11 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView>
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refeshing} onRefresh={onRefresh} />
+        }
+      >
         <Menu />
         <View>
           <HomeSlider
