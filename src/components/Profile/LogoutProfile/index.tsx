@@ -12,7 +12,7 @@ const LogoutProfile = () => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.btnLogout}>
+      <TouchableOpacity onPress={onLogout} style={styles.btnLogout}>
         <Text style={styles.textLogout}>Đăng xuất</Text>
       </TouchableOpacity>
     </View>

@@ -7,12 +7,14 @@ type initialStateType = {
   user: UserState | null;
   loading: boolean;
   error: string | null;
+  success: string | null;
 };
 
 const initialState: initialStateType = {
   user: null,
   loading: false,
   error: null,
+  success: null,
 };
 
 export const authSlice = createSlice({
@@ -28,6 +30,11 @@ export const authSlice = createSlice({
       state.user = null;
       AsyncStorage.removeItem("accessToken");
     },
+    hasSuccess: (state, action: PayloadAction<any>) => {
+      state.success = action.payload;
+      state.loading = false;
+    },
+
     loginSuccess: (state, action: PayloadAction<any>) => {
       state.user = action.payload.user;
       AsyncStorage.setItem("accessToken", action.payload.accessToken);
@@ -45,15 +52,22 @@ export const authSlice = createSlice({
       state.error = null;
       state.loading = false;
     },
+    updateProfileSuccess: (state, action: PayloadAction<any>) => {
+      state.user = action.payload;
+      state.error = null;
+      state.loading = false;
+    },
   },
 });
 
 export const {
   startLoading,
   hasError,
+  hasSuccess,
   loginSuccess,
   registerSuccess,
   changeAvatarSuccess,
+  updateProfileSuccess,
 } = authSlice.actions;
 export const selectUser = (state: any) => state.auth.user;
 export const selectAccessToken = (state: any) => state.auth.accessToken;
@@ -68,7 +82,6 @@ export const login =
         password,
       });
       if (response.data.user) {
-        // console.log(response.data);
         dispatch(loginSuccess(response.data));
       } else {
         if (response.data.message) {
@@ -90,10 +103,8 @@ export const register = (data: RegisterType) => async (dispatch: any) => {
       dispatch(registerSuccess(response.data));
     } else {
       if (response.data.message) {
-        // console.log(response.data.messages);
         dispatch(hasError("Email already exists"));
       } else {
-        console.log(response.data);
         dispatch(hasError("Something went wrong"));
       }
     }
@@ -140,14 +151,31 @@ export const authenticate = () => async (dispatch: any) => {
 
 export const changeAvatar = (avatar: string) => async (dispatch: any) => {
   try {
-    console.log(avatar);
     dispatch(startLoading());
     const response = await axiosInstance.post("/user/change-avatar", {
       avatar,
     });
-    console.log(response.data);
     if (response.data.user) {
       dispatch(changeAvatarSuccess(response.data.user));
+    } else {
+      if (response.data.message) {
+        dispatch(hasError(response.data.message));
+      } else {
+        dispatch(hasError("Something went wrong"));
+      }
+    }
+  } catch (error) {
+    dispatch(hasError("Something went wrong"));
+  }
+};
+
+export const updateProfile = (data: any) => async (dispatch: any) => {
+  try {
+    dispatch(startLoading());
+    const response = await axiosInstance.post("/user/update-profile", data);
+    if (response.data) {
+      dispatch(updateProfileSuccess(response.data));
+      dispatch(hasSuccess("Profile updated successfully"));
     } else {
       if (response.data.message) {
         dispatch(hasError(response.data.message));

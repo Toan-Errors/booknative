@@ -12,52 +12,52 @@ interface ChangeAvatarProps {
 }
 
 const ChangeAvatar = ({ avatar, setAvatar }: ChangeAvatarProps) => {
-  const [image, setImage] = React.useState<any>(null);
   const [loading, setLoading] = React.useState<boolean>(false);
 
   const handleChoosePhoto = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
+    try {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
 
-    if (result.canceled) {
-      setLoading(false);
-      setImage(null);
-      return;
-    }
+      if (result.canceled) {
+        return;
+      }
 
-    let localUri = result.assets[0].uri;
-    setImage(localUri);
-    setLoading(true);
-    let filename = localUri.split("/").pop();
+      let localUri = result.assets[0].uri;
+      setLoading(true);
+      setAvatar(localUri);
+      let filename = localUri.split("/").pop();
 
-    let match = /\.(\w+)$/.exec(filename as string);
-    let type = match ? `image/${match[1]}` : `image`;
+      let match = /\.(\w+)$/.exec(filename as string);
+      let type = match ? `image/${match[1]}` : `image`;
 
-    let formData = new FormData();
-    formData.append("image", {
-      uri: localUri,
-      name: filename,
-      type,
-    } as any);
+      let formData = new FormData();
+      formData.append("image", {
+        uri: localUri,
+        name: filename,
+        type,
+      } as any);
 
-    const response = await axios.post(HOST_API_IMAGE, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+      const response = await axios.post(HOST_API_IMAGE, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
-    if (response.status === 201) {
-      setLoading(false);
-      setImage(null);
-      // console.log(response.data);
-      setAvatar(HOST_API_IMAGE + "/" + response.data);
-    } else {
-      setLoading(false);
-      console.log("Error");
+      if (response.status === 201) {
+        setLoading(false);
+        setAvatar(HOST_API_IMAGE + "/" + response.data);
+      } else {
+        setLoading(false);
+        console.log("Error");
+      }
+    } catch (e) {
+      console.log(e);
+      setAvatar("");
     }
   };
 
@@ -76,7 +76,7 @@ const ChangeAvatar = ({ avatar, setAvatar }: ChangeAvatarProps) => {
       >
         {avatar && (
           <Image
-            source={{ uri: loading ? image : avatar }}
+            source={{ uri: avatar }}
             style={{
               width: "100%",
               height: "100%",

@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { useAppSelector } from "../../../hooks/useAppDispatch";
 
 interface ListViewFunctionProps {
   data: {
@@ -13,14 +14,19 @@ interface ListViewFunctionProps {
 
 const ListViewFunction = ({ data }: ListViewFunctionProps) => {
   const navigation = useNavigation();
+  const { user } = useAppSelector((state) => state.auth);
 
   return (
     <View style={styles.container}>
       {data.map((item, index) => (
         <TouchableOpacity
-          onPress={() =>
-            navigation.navigate("Settings", { screen: item.navigate as any })
-          }
+          onPress={() => {
+            if (user && item.navigate) {
+              navigation.navigate("Settings", { screen: item.navigate as any });
+            } else {
+              navigation.navigate("Auth");
+            }
+          }}
           key={index}
           style={styles.item}
         >
