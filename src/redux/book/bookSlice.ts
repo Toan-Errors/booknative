@@ -60,7 +60,11 @@ export const fetchBook = (id: string) => async (dispatch: any) => {
   try {
     dispatch(startLoading());
     const response = await axiosInstance.get(`/books/${id}`);
-    dispatch(getBookSuccess(response.data));
+    if (response.data) {
+      dispatch(getBookSuccess(response.data));
+    } else {
+      dispatch(hasError("Book not found"));
+    }
   } catch (error) {
     console.log(error);
   }

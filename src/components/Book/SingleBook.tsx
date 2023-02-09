@@ -5,6 +5,7 @@ import {
   SafeAreaView,
   Image,
   ScrollView,
+  Alert,
 } from "react-native";
 import React, { useEffect } from "react";
 import { useRoute } from "@react-navigation/native";
@@ -16,6 +17,7 @@ import SingleBookReview from "./components/SingleBook/SingleBookReview";
 import SingleBookInfo from "./components/SingleBook/SingleBookInfo";
 import SingleBookComment from "./components/SingleBook/SingleBookComment";
 import SingleBookFotter from "./components/SingleBook/SingleBookFotter";
+import { addToCart, hasError, hasSuccess } from "../../redux/cart/cartSlice";
 
 const SingleBook = () => {
   const route = useRoute();
@@ -23,12 +25,43 @@ const SingleBook = () => {
   const dispatch = useAppDispatch();
   const { book } = useAppSelector((state) => state.book);
   const [quantity, setQuantity] = React.useState(1);
+  const { items, error, success } = useAppSelector((state) => state.cart);
 
   useEffect(() => {
     dispatch(fetchBook(params.id));
   }, []);
 
+  console.log("items", items);
+
   const isSale = book?.price_sale !== book?.price;
+
+  const onAddToCart = () => {
+    const item = {
+      bookId: book?._id || "",
+      title: book?.title || "",
+      author: book?.author || "",
+      price: book?.price || 0,
+      price_sale: book?.price_sale || 0,
+      quantity: quantity || 1,
+      coverImage: book?.coverImage || "",
+    };
+    dispatch(addToCart(item));
+  };
+
+  useEffect(() => {
+    if (error) {
+      Alert.alert("Error", error, [{ text: "OK" }]);
+      dispatch(hasError(null));
+      return;
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (success) {
+      Alert.alert("Thông báo: ", success);
+      dispatch(hasSuccess(null));
+    }
+  }, [success]);
 
   if (!book) return <Text>Loading...</Text>;
   return (
@@ -54,6 +87,7 @@ const SingleBook = () => {
         _id={book?._id}
         quantity={quantity}
         setQuantity={setQuantity}
+        onAddToCart={onAddToCart}
       />
     </SafeAreaView>
   );

@@ -14,6 +14,7 @@ import HomeSlider from "../components/Slider/HomeSlider";
 import { Ionicons } from "@expo/vector-icons";
 import Menu from "../components/Menu";
 import ListBook from "../components/Book/ListBook";
+import { getCart } from "../redux/cart/cartSlice";
 
 export default function HomeScreen() {
   const [refeshing, setRefeshing] = React.useState(false);
@@ -23,11 +24,13 @@ export default function HomeScreen() {
   const onRefresh = useCallback(() => {
     setRefeshing(true);
     dispatch(fetchBooks());
+    dispatch(getCart());
     setRefeshing(false);
   }, []);
 
   useEffect(() => {
     dispatch(fetchBooks());
+    dispatch(getCart());
   }, []);
 
   return (

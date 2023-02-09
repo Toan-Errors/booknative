@@ -173,15 +173,15 @@ export const updateProfile = (data: any) => async (dispatch: any) => {
   try {
     dispatch(startLoading());
     const response = await axiosInstance.post("/user/update-profile", data);
+    if (response.data.message) {
+      dispatch(hasError(response.data.message));
+      return;
+    }
     if (response.data) {
       dispatch(updateProfileSuccess(response.data));
       dispatch(hasSuccess("Profile updated successfully"));
     } else {
-      if (response.data.message) {
-        dispatch(hasError(response.data.message));
-      } else {
-        dispatch(hasError("Something went wrong"));
-      }
+      dispatch(hasError("Something went wrong"));
     }
   } catch (error) {
     dispatch(hasError("Something went wrong"));

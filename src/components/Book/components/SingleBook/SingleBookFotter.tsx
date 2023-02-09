@@ -6,12 +6,14 @@ interface SingleBookFotterProps {
   _id: string;
   quantity: number;
   setQuantity: (quantity: number) => void;
+  onAddToCart: () => void;
 }
 
 const SingleBookFotter = ({
   _id,
   quantity,
   setQuantity,
+  onAddToCart,
 }: SingleBookFotterProps) => {
   return (
     <View style={styles.container}>
@@ -41,7 +43,7 @@ const SingleBookFotter = ({
       </View>
       <View style={styles.addToCart}>
         {/* Add to cart */}
-        <TouchableOpacity>
+        <TouchableOpacity onPress={onAddToCart}>
           <Text style={styles.addToCartText}>Thêm vào giỏ hàng</Text>
         </TouchableOpacity>
       </View>
