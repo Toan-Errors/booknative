@@ -20,6 +20,7 @@ export type RootStackParamList = {
   Root: NavigatorScreenParams<RootTabParamList> | undefined;
   Settings: NavigatorScreenParams<SettingsParamList> | undefined;
   SingleBook: { id: string };
+  Checkout: undefined;
   Auth: undefined;
   Modal: undefined;
   NotFound: undefined;
@@ -31,10 +32,12 @@ export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
 export type RootTabParamList = {
   Home: undefined;
   Browse: undefined;
+  Cart: undefined;
   Search: undefined;
   Library: undefined;
   Account: undefined;
   SingleBook: undefined;
+  Checkout: undefined;
   Profile: undefined;
   Auth: undefined;
 };

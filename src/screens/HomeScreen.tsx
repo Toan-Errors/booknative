@@ -20,6 +20,7 @@ export default function HomeScreen() {
   const [refeshing, setRefeshing] = React.useState(false);
   const dispatch = useAppDispatch();
   const { books } = useAppSelector((state) => state.book);
+  const { user } = useAppSelector((state) => state.auth);
 
   const onRefresh = useCallback(() => {
     setRefeshing(true);
@@ -30,8 +31,13 @@ export default function HomeScreen() {
 
   useEffect(() => {
     dispatch(fetchBooks());
-    dispatch(getCart());
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      dispatch(getCart());
+    }
+  }, [user]);
 
   return (
     <SafeAreaView>

@@ -42,6 +42,8 @@ import AddressSetting from "../components/Settings/AddressSetting";
 import FavoriteSetting from "../components/Settings/FavoriteSetting";
 import ReviewSetting from "../components/Settings/ReviewSetting";
 import ChangePassword from "../components/Settings/ChangePassword";
+import CartScreen from "../screens/CartScreen";
+import CheckoutScreen from "../screens/CheckoutScreen";
 
 export default function Navigation({
   colorScheme,
@@ -80,6 +82,11 @@ function RootNavigator() {
       <Stack.Screen
         name="SingleBook"
         component={SingleBook}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Checkout"
+        component={CheckoutScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen
@@ -131,6 +138,17 @@ function BottomTabNavigator() {
         options={{
           title: "Browse",
           tabBarIcon: ({ color }) => <TabBarIcon name="book" color={color} />,
+        }}
+      />
+
+      <BottomTab.Screen
+        name="Cart"
+        component={CartScreen}
+        options={{
+          title: "Giỏ hàng",
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="shopping-cart" color={color} />
+          ),
         }}
       />
 

@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { CartItem } from "../../types/cart/cart-type";
+import { CartItem, CartState } from "../../types/cart/cart-type";
 import axiosInstance from "../../utils/axios";
 
 type initialStateType = {
-  items: CartItem[];
+  items: CartState[];
   totalQuantity: number;
   changed: boolean;
   loading: boolean;
@@ -61,6 +61,19 @@ export const cartSlice = createSlice({
       state.loading = false;
       state.error = null;
     },
+
+    changeQuantitySuccess: (state, action: PayloadAction<any>) => {
+      const existingItem = state.items.find(
+        (item) => item.bookId === action.payload.bookId
+      );
+      if (existingItem) {
+        existingItem.quantity = action.payload.quantity;
+      }
+      state.totalQuantity = state.totalQuantity + action.payload.quantity;
+      state.changed = true;
+      state.loading = false;
+      state.error = null;
+    },
   },
 });
 
@@ -70,6 +83,7 @@ export const {
   hasSuccess,
   replaceCart,
   addItemToCartSuccess,
+  changeQuantitySuccess,
 } = cartSlice.actions;
 export const selectCartItems = (state: any) => state.cart.items;
 export const selectCartTotalQuantity = (state: any) => state.cart.totalQuantity;
@@ -86,7 +100,7 @@ export const getCart = () => async (dispatch: any) => {
       console.log("Không thể lấy giỏ hàng");
     }
   } catch (error) {
-    console.log("Không thể lấy giỏ hàng");
+    console.log(error);
   }
 };
 
@@ -104,3 +118,22 @@ export const addToCart = (item: CartItem) => async (dispatch: any) => {
     dispatch(hasError("Không thể thêm vào giỏ hàng"));
   }
 };
+
+export const changeQuantity =
+  (id: string, type: string) => async (dispatch: any) => {
+    try {
+      dispatch(startLoading());
+      // console.log(id, type);
+      const response = await axiosInstance.post(`/cart/change-quantity`, {
+        cartId: id,
+        type,
+      });
+      if (response.data) {
+        dispatch(changeQuantitySuccess(response.data));
+      } else {
+        dispatch(hasError("Không thể thay đổi số lượng"));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };

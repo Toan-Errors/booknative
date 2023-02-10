@@ -37,6 +37,12 @@ export const bookSlice = createSlice({
       state.loading = false;
       state.error = null;
     },
+
+    changeQuantity: (state, action: PayloadAction<BookSingleState>) => {
+      state.book = action.payload;
+      state.loading = false;
+      state.error = null;
+    },
   },
 });
 

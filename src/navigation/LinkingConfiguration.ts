@@ -25,9 +25,19 @@ const linking: LinkingOptions<RootStackParamList> = {
               BrowseScreen: "browse",
             },
           },
+          Cart: {
+            screens: {
+              CartScreen: "cart",
+            },
+          },
           SingleBook: {
             screens: {
               SingleBook: "single-book",
+            },
+          },
+          Checkout: {
+            screens: {
+              CheckoutScreen: "checkout",
             },
           },
         },

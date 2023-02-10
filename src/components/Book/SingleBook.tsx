@@ -25,13 +25,11 @@ const SingleBook = () => {
   const dispatch = useAppDispatch();
   const { book } = useAppSelector((state) => state.book);
   const [quantity, setQuantity] = React.useState(1);
-  const { items, error, success } = useAppSelector((state) => state.cart);
+  const { error, success } = useAppSelector((state) => state.cart);
 
   useEffect(() => {
     dispatch(fetchBook(params.id));
   }, []);
-
-  console.log("items", items);
 
   const isSale = book?.price_sale !== book?.price;
 
