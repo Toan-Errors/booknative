@@ -11,6 +11,7 @@ export type UserState = {
   createdAt: string;
   updatedAt: string;
   avatar: string;
+  deliveryAddresses: DeliveryAddressType[] | null | undefined;
 };
 
 export type LoginType = {
@@ -24,4 +25,15 @@ export type RegisterType = {
   firstName: string;
   lastName: string;
   phone: string;
+};
+
+export type DeliveryAddressType = {
+  id: string;
+  name: string;
+  phone: string;
+  address: string;
+  wards: string;
+  district: string;
+  city: string;
+  country: string;
 };

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ScrollView } from "react-native";
+import { StyleSheet, Text, View, ScrollView, Alert } from "react-native";
 import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/useAppDispatch";
 import Cart from "../components/Cart/ListCart";
@@ -38,6 +38,8 @@ const CartScreen = () => {
   useEffect(() => {
     if (checkoutItems.length > 0) {
       navigation.navigate("Checkout");
+    } else {
+      // Alert.alert("Please select at least one item");
     }
   }, [checkoutItems]);
 

@@ -27,6 +27,7 @@ import HomeScreen from "../screens/HomeScreen";
 import ModalScreen from "../screens/ModalScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
 import {
+  CheckoutParamList,
   RootStackParamList,
   RootTabParamList,
   RootTabScreenProps,
@@ -44,6 +45,8 @@ import ReviewSetting from "../components/Settings/ReviewSetting";
 import ChangePassword from "../components/Settings/ChangePassword";
 import CartScreen from "../screens/CartScreen";
 import CheckoutScreen from "../screens/CheckoutScreen";
+import SelectDelivery from "../components/Checkout/Screen/SelectDelivery";
+import AddDelivery from "../components/Checkout/Screen/AddDelivery";
 
 export default function Navigation({
   colorScheme,
@@ -86,7 +89,7 @@ function RootNavigator() {
       />
       <Stack.Screen
         name="Checkout"
-        component={CheckoutScreen}
+        component={CheckoutNavigator}
         options={{ headerShown: false }}
       />
       <Stack.Screen
@@ -126,7 +129,7 @@ function BottomTabNavigator() {
         name="Home"
         component={HomeScreen}
         options={({ navigation }: RootTabScreenProps<"Home">) => ({
-          title: "Home",
+          title: "Trang chủ",
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
           header: () => <Header navigation={navigation} title={"Book Store"} />,
         })}
@@ -136,7 +139,7 @@ function BottomTabNavigator() {
         name="Browse"
         component={BrowseScreen}
         options={{
-          title: "Browse",
+          title: "Danh mục",
           tabBarIcon: ({ color }) => <TabBarIcon name="book" color={color} />,
         }}
       />
@@ -156,7 +159,7 @@ function BottomTabNavigator() {
         name="Profile"
         component={ProfileScreen}
         options={{
-          title: "Profile",
+          title: "Cá nhân",
           tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
           headerShown: false,
         }}
@@ -221,5 +224,29 @@ export function SettingNavigator() {
         options={{ title: "Oops!" }}
       />
     </Setting.Navigator>
+  );
+}
+
+const Checkout = createNativeStackNavigator<CheckoutParamList>();
+
+export function CheckoutNavigator() {
+  return (
+    <Checkout.Navigator>
+      <Checkout.Screen
+        name="Home"
+        component={CheckoutScreen}
+        options={{ headerShown: false }}
+      />
+      <Checkout.Screen
+        name="SelectDelivery"
+        component={SelectDelivery}
+        options={{ title: "Chọn địa chỉ nhận hàng" }}
+      />
+      <Checkout.Screen
+        name="AddDelivery"
+        component={AddDelivery}
+        options={{ title: "Thêm địa chỉ nhận hàng" }}
+      />
+    </Checkout.Navigator>
   );
 }

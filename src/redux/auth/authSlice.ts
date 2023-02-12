@@ -1,5 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RegisterType, UserState } from "../../types/auth/auth-type";
+import {
+  DeliveryAddressType,
+  RegisterType,
+  UserState,
+} from "../../types/auth/auth-type";
 import axiosInstance from "../../utils/axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -180,6 +184,68 @@ export const updateProfile = (data: any) => async (dispatch: any) => {
     if (response.data) {
       dispatch(updateProfileSuccess(response.data));
       dispatch(hasSuccess("Profile updated successfully"));
+    } else {
+      dispatch(hasError("Something went wrong"));
+    }
+  } catch (error) {
+    dispatch(hasError("Something went wrong"));
+  }
+};
+
+export const addDeliveryAddress =
+  (data: DeliveryAddressType) => async (dispatch: any) => {
+    try {
+      dispatch(startLoading());
+      const response = await axiosInstance.post("/user/delivery-address", data);
+      if (response.data.message) {
+        dispatch(hasError(response.data.message));
+        return;
+      }
+      if (response.data) {
+        dispatch(updateProfileSuccess(response.data));
+        dispatch(hasSuccess("Address added successfully"));
+      } else {
+        dispatch(hasError("Something went wrong"));
+      }
+    } catch (error) {
+      dispatch(hasError("Something went wrong"));
+    }
+  };
+
+export const updateDeliveryAddress =
+  (data: DeliveryAddressType) => async (dispatch: any) => {
+    try {
+      dispatch(startLoading());
+      const response = await axiosInstance.put("/user/delivery-address", data);
+      if (response.data.message) {
+        dispatch(hasError(response.data.message));
+        return;
+      }
+      if (response.data) {
+        dispatch(updateProfileSuccess(response.data));
+        dispatch(hasSuccess("Address updated successfully"));
+      } else {
+        dispatch(hasError("Something went wrong"));
+      }
+    } catch (error) {
+      dispatch(hasError("Something went wrong"));
+    }
+  };
+
+export const deleteDeliveryAddress = (id: string) => async (dispatch: any) => {
+  try {
+    dispatch(startLoading());
+
+    const response = await axiosInstance.delete(`/user/delivery-address`, {
+      addressId: id,
+    } as any);
+    if (response.data.message) {
+      dispatch(hasError(response.data.message));
+      return;
+    }
+    if (response.data) {
+      dispatch(updateProfileSuccess(response.data));
+      dispatch(hasSuccess("Address deleted successfully"));
     } else {
       dispatch(hasError("Something went wrong"));
     }

@@ -1,18 +1,24 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, ScrollView } from "react-native";
 import React, { useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useAppSelector } from "../hooks/useAppDispatch";
+import { useAppDispatch, useAppSelector } from "../hooks/useAppDispatch";
 import { useNavigation } from "@react-navigation/native";
 import DeliveryAddress from "../components/Checkout/DeliveryAddress";
-import Payment from "../components/Checkout/Payment";
-import CheckoutStatus from "../components/Checkout/CheckoutStatus";
-import CheckoutStep from "../components/Checkout/CheckoutStep";
+import { DeliveryAddressType } from "../types/auth/auth-type";
+import ListProduct from "../components/Checkout/ListProduct";
+import { addDeliveryAddress } from "../redux/checkout/checkoutSlice";
 
 const CheckoutScreen = () => {
-  const [step, setStep] = React.useState<number>(1);
-  const { items } = useAppSelector((state) => state.checkout);
+  const { items, delivery_address } = useAppSelector((state) => state.checkout);
   const { user } = useAppSelector((state) => state.auth);
-  const [diliveryAddress, setDeliveryAddress] = React.useState<any>({});
+
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (!user?.deliveryAddresses) return;
+    const deliveryAddress = user?.deliveryAddresses[0];
+    dispatch(addDeliveryAddress(deliveryAddress as any));
+  }, [user?.deliveryAddresses]);
 
   const navigation = useNavigation();
 
@@ -22,22 +28,12 @@ const CheckoutScreen = () => {
     }
   }, [items]);
 
-  const onDeliveryAddress = (data: any) => {
-    console.log(data);
-    setDeliveryAddress(data);
-    setStep(2);
-  };
-
   return (
-    <SafeAreaView style={styles.container}>
-      <CheckoutStep step={step} />
-      {/* Tab step */}
-      {step === 1 && (
-        <DeliveryAddress onSubmit={onDeliveryAddress} user={user} />
-      )}
-      {step === 2 && <Payment />}
-      {step === 3 && <CheckoutStatus />}
-      {/* Tab step */}
+    <SafeAreaView>
+      <ScrollView style={styles.container}>
+        <DeliveryAddress deliveryAddress={delivery_address} />
+        <ListProduct books={items} />
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -47,7 +43,6 @@ export default CheckoutScreen;
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#fff",
-    alignItems: "center",
     height: "100%",
   },
   header: {
