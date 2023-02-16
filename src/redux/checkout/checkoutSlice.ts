@@ -1,6 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { DeliveryAddressType } from "../../types/auth/auth-type";
 import { CartState } from "../../types/cart/cart-type";
+import { PaymentState } from "../../types/order/payment-type";
+import { ShippingState } from "../../types/order/shipping-type";
+import axiosInstance from "../../utils/axios";
 
 type initialStateType = {
   items: CartState[];
@@ -9,6 +12,10 @@ type initialStateType = {
   loading: boolean;
   error: string | null;
   success: string | null;
+  shippings: ShippingState[];
+  shipping: ShippingState;
+  payments: PaymentState[];
+  payment: PaymentState;
 };
 
 const initialState: initialStateType = {
@@ -18,6 +25,10 @@ const initialState: initialStateType = {
   loading: false,
   error: null,
   success: null,
+  shippings: [],
+  shipping: {} as ShippingState,
+  payments: [],
+  payment: {} as PaymentState,
 };
 
 export const checkoutSlice = createSlice({
@@ -50,6 +61,32 @@ export const checkoutSlice = createSlice({
       state.loading = false;
       state.error = null;
     },
+
+    addShippingMethods: (state, action: any) => {
+      state.shippings = action.payload;
+      state.shipping = action.payload[0];
+      state.loading = false;
+      state.error = null;
+    },
+
+    selectShippingMethod: (state, action: any) => {
+      state.shipping = action.payload;
+      state.loading = false;
+      state.error = null;
+    },
+
+    addPaymentMethods: (state, action: any) => {
+      state.payments = action.payload;
+      state.payment = action.payload[0];
+      state.loading = false;
+      state.error = null;
+    },
+
+    selectPaymentMethod: (state, action: any) => {
+      state.payment = action.payload;
+      state.loading = false;
+      state.error = null;
+    },
   },
 });
 
@@ -59,5 +96,29 @@ export const {
   hasSuccess,
   addItemsToCheckout,
   addDeliveryAddress,
+  addShippingMethods,
+  selectShippingMethod,
+  addPaymentMethods,
+  selectPaymentMethod,
 } = checkoutSlice.actions;
 export default checkoutSlice.reducer;
+
+export const fetchShippingMethods = () => async (dispatch: any) => {
+  try {
+    dispatch(startLoading());
+    const response = await axiosInstance.get("/order/shipping");
+    dispatch(addShippingMethods(response.data));
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const fetchPaymentMethods = () => async (dispatch: any) => {
+  try {
+    dispatch(startLoading());
+    const response = await axiosInstance.get("/order/payment");
+    dispatch(addPaymentMethods(response.data));
+  } catch (error) {
+    console.log(error);
+  }
+};

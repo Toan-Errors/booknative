@@ -71,4 +71,5 @@ export type CheckoutParamList = {
   Home: undefined;
   SelectDelivery: undefined;
   AddDelivery: undefined;
+  SelectShipping: undefined;
 };

@@ -25,7 +25,6 @@ export default function HomeScreen() {
   const onRefresh = useCallback(() => {
     setRefeshing(true);
     dispatch(fetchBooks());
-    dispatch(getCart());
     setRefeshing(false);
   }, []);
 

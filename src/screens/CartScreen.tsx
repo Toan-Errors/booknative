@@ -10,6 +10,7 @@ import { useNavigation } from "@react-navigation/native";
 const CartScreen = () => {
   const [cartsSelected, setCartsSelected] = React.useState<string[]>([]);
   const dispatch = useAppDispatch();
+  const { user } = useAppSelector((state) => state.auth);
   const { items } = useAppSelector((state) => state.cart);
   const { items: checkoutItems } = useAppSelector((state) => state.checkout);
   const [total, setTotal] = React.useState<number>(0);
@@ -31,6 +32,10 @@ const CartScreen = () => {
   }, []);
 
   const onCheckout = () => {
+    if (!user) {
+      Alert.alert("Please login to checkout");
+      return;
+    }
     const carts = items.filter((item) => cartsSelected.includes(item._id));
     dispatch(addItemsToCheckout({ items: carts, total } as any));
   };

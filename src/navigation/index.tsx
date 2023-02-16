@@ -47,6 +47,7 @@ import CartScreen from "../screens/CartScreen";
 import CheckoutScreen from "../screens/CheckoutScreen";
 import SelectDelivery from "../components/Checkout/Screen/SelectDelivery";
 import AddDelivery from "../components/Checkout/Screen/AddDelivery";
+import SelectShipping from "../components/Checkout/Screen/SelectShipping";
 
 export default function Navigation({
   colorScheme,
@@ -246,6 +247,11 @@ export function CheckoutNavigator() {
         name="AddDelivery"
         component={AddDelivery}
         options={{ title: "Thêm địa chỉ nhận hàng" }}
+      />
+      <Checkout.Screen
+        name="SelectShipping"
+        component={SelectShipping}
+        options={{ title: "Chọn phương thức vận chuyển" }}
       />
     </Checkout.Navigator>
   );

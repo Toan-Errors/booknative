@@ -1,14 +1,19 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
 import React from "react";
+import { CartState } from "../../../types/cart/cart-type";
+import { formatVND } from "../../../utils/formatNumber";
+import Card from "./Card";
 
 interface Props {
-  books: any;
+  books: CartState[];
 }
 
 const ListProduct = ({ books }: Props) => {
   return (
     <View>
-      <Text>ListProduct</Text>
+      {books.map((book: CartState) => (
+        <Card key={book._id} book={book} />
+      ))}
     </View>
   );
 };

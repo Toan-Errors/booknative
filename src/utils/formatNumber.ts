@@ -3,5 +3,9 @@ export function formatNumber(number: number) {
 }
 
 export function formatVND(number: number) {
-  return number.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + " đ";
+  try {
+    return number.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + " đ";
+  } catch (error) {
+    return "0 đ";
+  }
 }

@@ -6,10 +6,20 @@ import { useNavigation } from "@react-navigation/native";
 import DeliveryAddress from "../components/Checkout/DeliveryAddress";
 import { DeliveryAddressType } from "../types/auth/auth-type";
 import ListProduct from "../components/Checkout/ListProduct";
-import { addDeliveryAddress } from "../redux/checkout/checkoutSlice";
+import {
+  addDeliveryAddress,
+  fetchPaymentMethods,
+  fetchShippingMethods,
+} from "../redux/checkout/checkoutSlice";
+import Voucher from "../components/Checkout/Voucher";
+import ShippingMethod from "../components/Checkout/ShippingMethod";
+import PaymentMethod from "../components/Checkout/PaymentMethod";
+import TotalDetail from "../components/Checkout/TotalDetail";
 
 const CheckoutScreen = () => {
-  const { items, delivery_address } = useAppSelector((state) => state.checkout);
+  const { items, delivery_address, shipping, payment, total } = useAppSelector(
+    (state) => state.checkout
+  );
   const { user } = useAppSelector((state) => state.auth);
 
   const dispatch = useAppDispatch();
@@ -19,6 +29,11 @@ const CheckoutScreen = () => {
     const deliveryAddress = user?.deliveryAddresses[0];
     dispatch(addDeliveryAddress(deliveryAddress as any));
   }, [user?.deliveryAddresses]);
+
+  useEffect(() => {
+    dispatch(fetchShippingMethods());
+    dispatch(fetchPaymentMethods());
+  }, []);
 
   const navigation = useNavigation();
 
@@ -33,6 +48,10 @@ const CheckoutScreen = () => {
       <ScrollView style={styles.container}>
         <DeliveryAddress deliveryAddress={delivery_address} />
         <ListProduct books={items} />
+        <Voucher />
+        <ShippingMethod shipping={shipping} />
+        <PaymentMethod payment={payment} />
+        <TotalDetail total={total} totalShipping={shipping.shippingCost} />
       </ScrollView>
     </SafeAreaView>
   );
