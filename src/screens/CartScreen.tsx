@@ -6,6 +6,7 @@ import { getCart } from "../redux/cart/cartSlice";
 import TotalView from "../components/Cart/TotalView";
 import { addItemsToCheckout } from "../redux/checkout/checkoutSlice";
 import { useNavigation } from "@react-navigation/native";
+import { authenticate } from "../redux/auth/authSlice";
 
 const CartScreen = () => {
   const [cartsSelected, setCartsSelected] = React.useState<string[]>([]);
@@ -31,6 +32,10 @@ const CartScreen = () => {
     dispatch(getCart());
   }, []);
 
+  useEffect(() => {
+    dispatch(authenticate());
+  }, []);
+
   const onCheckout = () => {
     if (!user) {
       Alert.alert("Please login to checkout");
@@ -50,6 +55,17 @@ const CartScreen = () => {
 
   return (
     <View style={styles.container}>
+      {items.length === 0 && (
+        <View
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%",
+          }}
+        >
+          <Text>Cart is empty</Text>
+        </View>
+      )}
       <Cart
         carts={items}
         cartsSelected={cartsSelected}

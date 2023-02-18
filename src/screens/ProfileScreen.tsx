@@ -1,8 +1,10 @@
 import { StyleSheet, Text, View, ScrollView } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import AuthProfile from "../components/Profile/AuthProfile";
 import ListViewFunction from "../components/Profile/ListViewFunction";
 import LogoutProfile from "../components/Profile/LogoutProfile";
+import { useAppDispatch } from "../hooks/useAppDispatch";
+import { authenticate } from "../redux/auth/authSlice";
 
 const listFunction = [
   {
@@ -38,6 +40,12 @@ const listFunction = [
 ];
 
 const ProfileScreen = () => {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(authenticate());
+  }, []);
+
   return (
     <View style={styles.container}>
       <AuthProfile />

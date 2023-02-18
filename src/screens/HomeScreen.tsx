@@ -5,6 +5,7 @@ import {
   SafeAreaView,
   ScrollView,
   RefreshControl,
+  ActivityIndicator,
 } from "react-native";
 import React, { useEffect, useCallback } from "react";
 import axiosInstance from "../utils/axios";
@@ -15,16 +16,19 @@ import { Ionicons } from "@expo/vector-icons";
 import Menu from "../components/Menu";
 import ListBook from "../components/Book/ListBook";
 import { getCart } from "../redux/cart/cartSlice";
+import { authenticate } from "../redux/auth/authSlice";
+import Loading from "../components/Loading";
 
 export default function HomeScreen() {
   const [refeshing, setRefeshing] = React.useState(false);
   const dispatch = useAppDispatch();
-  const { books } = useAppSelector((state) => state.book);
+  const { books, loading } = useAppSelector((state) => state.book);
   const { user } = useAppSelector((state) => state.auth);
 
   const onRefresh = useCallback(() => {
     setRefeshing(true);
     dispatch(fetchBooks());
+    dispatch(authenticate());
     setRefeshing(false);
   }, []);
 
@@ -69,23 +73,37 @@ export default function HomeScreen() {
               },
             ]}
           />
-          <ListBook
-            title="Fantasy"
-            books={books.filter((book) => book.genres.includes("Fantasy"))}
-          />
-          <ListBook
-            title="Comedy"
-            books={books.filter((book) => book.genres.includes("Comedy"))}
-          />
-          <ListBook
-            title="Adventure"
-            books={books.filter((book) => book.genres.includes("Adventure"))}
-          />
-          <ListBook
-            title="Action"
-            books={books.filter((book) => book.genres.includes("Action"))}
-          />
-          <Text>HomeScreen</Text>
+          {!(books.length > 0) ? (
+            <Loading
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+                height: 300,
+              }}
+            />
+          ) : (
+            <React.Fragment>
+              <ListBook
+                title="Fantasy"
+                books={books.filter((book) => book.genres.includes("Fantasy"))}
+              />
+              <ListBook
+                title="Comedy"
+                books={books.filter((book) => book.genres.includes("Comedy"))}
+              />
+              <ListBook
+                title="Adventure"
+                books={books.filter((book) =>
+                  book.genres.includes("Adventure")
+                )}
+              />
+              <ListBook
+                title="Action"
+                books={books.filter((book) => book.genres.includes("Action"))}
+              />
+            </React.Fragment>
+          )}
         </View>
       </ScrollView>
     </SafeAreaView>
