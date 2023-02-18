@@ -74,6 +74,11 @@ export const cartSlice = createSlice({
       state.loading = false;
       state.error = null;
     },
+
+    removeItemFromCartSuccess: (state, action: PayloadAction<any>) => {
+      const ids = action.payload;
+      state.items = state.items.filter((item) => !ids.includes(item._id));
+    },
   },
 });
 
@@ -84,6 +89,7 @@ export const {
   replaceCart,
   addItemToCartSuccess,
   changeQuantitySuccess,
+  removeItemFromCartSuccess,
 } = cartSlice.actions;
 export const selectCartItems = (state: any) => state.cart.items;
 export const selectCartTotalQuantity = (state: any) => state.cart.totalQuantity;
@@ -137,3 +143,18 @@ export const changeQuantity =
       console.log(error);
     }
   };
+
+export const deleteItems = (ids: string[]) => async (dispatch: any) => {
+  try {
+    dispatch(startLoading());
+    const response = await axiosInstance.post("/cart/delete", { ids });
+    if (response.data) {
+      dispatch(removeItemFromCartSuccess(ids));
+      // dispatch(hasSuccess("Xóa sản phẩm thành công"));
+    } else {
+      // dispatch(hasError("Không thể xóa sản phẩm"));
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
