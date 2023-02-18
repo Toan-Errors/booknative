@@ -12,6 +12,7 @@ interface SingleBookHeaderProps {
   rating: number;
   rating_count: number;
   isSale: boolean;
+  wishlist: boolean;
 }
 
 const SingleBookHeader = ({
@@ -22,6 +23,7 @@ const SingleBookHeader = ({
   rating,
   rating_count,
   isSale,
+  wishlist,
 }: SingleBookHeaderProps) => {
   return (
     <View style={styles.titleContainer}>
@@ -30,7 +32,7 @@ const SingleBookHeader = ({
         <Ionicons
           name="ios-heart"
           size={24}
-          color="red"
+          color={wishlist ? "red" : "#aaa"}
           style={{ position: "absolute", top: 0, right: 0 }}
         />
       </View>

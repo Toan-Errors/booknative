@@ -18,6 +18,7 @@ import ListBook from "../components/Book/ListBook";
 import { getCart } from "../redux/cart/cartSlice";
 import { authenticate } from "../redux/auth/authSlice";
 import Loading from "../components/Loading";
+import { fetchWishlists } from "../redux/wishlist/wishlistSlice";
 
 export default function HomeScreen() {
   const [refeshing, setRefeshing] = React.useState(false);
@@ -29,11 +30,20 @@ export default function HomeScreen() {
     setRefeshing(true);
     dispatch(fetchBooks());
     dispatch(authenticate());
+    dispatch(fetchWishlists());
     setRefeshing(false);
   }, []);
 
   useEffect(() => {
     dispatch(fetchBooks());
+  }, []);
+
+  useEffect(() => {
+    dispatch(authenticate());
+  }, []);
+
+  useEffect(() => {
+    if (user) dispatch(fetchWishlists());
   }, []);
 
   useEffect(() => {

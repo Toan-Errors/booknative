@@ -18,17 +18,26 @@ import SingleBookInfo from "./components/SingleBook/SingleBookInfo";
 import SingleBookComment from "./components/SingleBook/SingleBookComment";
 import SingleBookFotter from "./components/SingleBook/SingleBookFotter";
 import { addToCart, hasError, hasSuccess } from "../../redux/cart/cartSlice";
+import {
+  getWishlistByBookId,
+  wishlistLike,
+} from "../../redux/wishlist/wishlistSlice";
 
 const SingleBook = () => {
   const route = useRoute();
   const params: any = route.params;
   const dispatch = useAppDispatch();
   const { book } = useAppSelector((state) => state.book);
+  const { wishlist } = useAppSelector((state) => state.wishlist);
   const [quantity, setQuantity] = React.useState(1);
   const { error, success } = useAppSelector((state) => state.cart);
 
   useEffect(() => {
     dispatch(fetchBook(params.id));
+  }, []);
+
+  useEffect(() => {
+    dispatch(getWishlistByBookId(params.id));
   }, []);
 
   const isSale = book?.price_sale !== book?.price;
@@ -61,6 +70,10 @@ const SingleBook = () => {
     }
   }, [success]);
 
+  const onLike = () => {
+    dispatch(wishlistLike(book?._id || ""));
+  };
+
   if (!book) return <Text>Loading...</Text>;
   return (
     <SafeAreaView>
@@ -75,8 +88,13 @@ const SingleBook = () => {
             isSale={isSale}
             rating={3}
             rating_count={1000}
+            wishlist={wishlist ? true : false}
           />
-          <SingleBookReview _id={book?._id} isLiked={true} />
+          <SingleBookReview
+            _id={book?._id}
+            isLiked={wishlist ? true : false}
+            onLike={onLike}
+          />
           <SingleBookInfo book={book} />
           <SingleBookComment />
         </View>

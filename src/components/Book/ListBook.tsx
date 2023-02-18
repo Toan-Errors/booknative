@@ -9,6 +9,7 @@ import React, { useState } from "react";
 import Book from "./Book";
 import { useNavigation } from "@react-navigation/native";
 import { BookState } from "../../types/book/book-type";
+import { useAppSelector } from "../../hooks/useAppDispatch";
 
 interface Props {
   books: BookState[];
@@ -17,6 +18,8 @@ interface Props {
 
 const ListBook: React.FC<Props> = ({ books, title }) => {
   const navigation = useNavigation();
+  const { wishlists } = useAppSelector((state) => state.wishlist);
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{title}</Text>

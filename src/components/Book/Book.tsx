@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, Dimensions, Image } from "react-native";
 import React from "react";
 import { BookState } from "../../types/book/book-type";
 import { formatVND } from "../../utils/formatNumber";
+import { Ionicons } from "@expo/vector-icons";
 
 interface Props {
   book: BookState;
@@ -12,6 +13,40 @@ const Book: React.FC<Props> = ({ book }) => {
 
   return (
     <View style={styles.container}>
+      <View style={{ position: "absolute", top: 0, right: 0, zIndex: 1 }}>
+        {isSale && (
+          <View
+            style={{
+              backgroundColor: "red",
+              padding: 5,
+              borderTopLeftRadius: 5,
+              borderBottomRightRadius: 5,
+            }}
+          >
+            <Text style={{ color: "#fff", fontWeight: "bold" }}>
+              {Math.round(((book.price - book.price_sale) / book.price) * 100)}%
+            </Text>
+          </View>
+        )}
+      </View>
+      <View
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          zIndex: 1,
+          padding: 5,
+          borderTopRightRadius: 5,
+          borderBottomLeftRadius: 5,
+        }}
+      >
+        <Ionicons
+          name="ios-heart"
+          size={20}
+          // color={book.isFavorite ? "red" : "#aaa"}
+          color={"#aaa"}
+        />
+      </View>
       <Image
         source={{ uri: book.coverImage }}
         style={{ width: 130, height: 150 }}
