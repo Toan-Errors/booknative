@@ -8,7 +8,7 @@ import {
   Alert,
 } from "react-native";
 import React, { useEffect } from "react";
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { useAppDispatch, useAppSelector } from "../../hooks/useAppDispatch";
 import { fetchBook } from "../../redux/book/bookSlice";
 import SingleBookSlider from "./components/SingleBook/SingleBookSlider";
@@ -22,6 +22,7 @@ import {
   getWishlistByBookId,
   wishlistLike,
 } from "../../redux/wishlist/wishlistSlice";
+import { addItemsToCheckout } from "../../redux/checkout/checkoutSlice";
 
 const SingleBook = () => {
   const route = useRoute();
@@ -41,6 +42,7 @@ const SingleBook = () => {
   }, []);
 
   const isSale = book?.price_sale !== book?.price;
+  const navigation = useNavigation();
 
   const onAddToCart = () => {
     const item = {
@@ -53,6 +55,28 @@ const SingleBook = () => {
       coverImage: book?.coverImage || "",
     };
     dispatch(addToCart(item));
+  };
+
+  const onBuyNow = async () => {
+    const item = {
+      bookId: book?._id || "",
+      title: book?.title || "",
+      author: book?.author || "",
+      price: book?.price || 0,
+      price_sale: book?.price_sale || 0,
+      quantity: quantity || 1,
+      coverImage: book?.coverImage || "",
+    };
+
+    const price = isSale ? item.price_sale : item.price;
+    const result = dispatch(
+      addItemsToCheckout({ items: [item], total: price * quantity } as any)
+    );
+    if (result.payload.items.length > 0) {
+      navigation.navigate("Checkout");
+    } else {
+      Alert.alert("Thông báo: ", "Lỗi khi thanh toán");
+    }
   };
 
   useEffect(() => {
@@ -104,6 +128,7 @@ const SingleBook = () => {
         quantity={quantity}
         setQuantity={setQuantity}
         onAddToCart={onAddToCart}
+        onBuyNow={onBuyNow}
       />
     </SafeAreaView>
   );

@@ -44,7 +44,7 @@ export default function HomeScreen() {
 
   useEffect(() => {
     if (user) dispatch(fetchWishlists());
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     if (user) {

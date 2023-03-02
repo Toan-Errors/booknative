@@ -33,22 +33,21 @@ const CartScreen = () => {
     dispatch(getCart());
   }, [user]);
 
-  const onCheckout = () => {
+  const onCheckout = async () => {
     if (!user) {
       Alert.alert("Please login to checkout");
       return;
     }
     const carts = items.filter((item) => cartsSelected.includes(item._id));
-    dispatch(addItemsToCheckout({ items: carts, total } as any));
-  };
-
-  useEffect(() => {
-    if (checkoutItems.length > 0) {
+    const data = await dispatch(
+      addItemsToCheckout({ items: carts, total } as any)
+    );
+    if (data.payload.items.length > 0) {
       navigation.navigate("Checkout");
     } else {
-      // Alert.alert("Please select at least one item");
+      Alert.alert("Please select at least one item");
     }
-  }, [checkoutItems]);
+  };
 
   return (
     <View style={styles.container}>

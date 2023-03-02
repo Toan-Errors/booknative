@@ -7,12 +7,13 @@ import { Price, TotalPrice } from "../../../utils/formatPrice";
 
 const OrderSetting = () => {
   const { orders } = useAppSelector((state) => state.order);
+  const { user } = useAppSelector((state) => state.auth);
 
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(fetchOrders());
-  }, []);
+  }, [user]);
 
   return (
     <View style={styles.container}>

@@ -31,9 +31,9 @@ export const authSlice = createSlice({
     hasError: (state, action: PayloadAction<any>) => {
       state.error = action.payload;
       state.loading = false;
-      state.user = null;
-      AsyncStorage.removeItem("accessToken");
-      delete axiosInstance.defaults.headers.common.Authorization;
+      // state.user = null;
+      // AsyncStorage.removeItem("accessToken");
+      // delete axiosInstance.defaults.headers.common.Authorization;
     },
     hasSuccess: (state, action: PayloadAction<any>) => {
       state.success = action.payload;
@@ -60,8 +60,7 @@ export const authSlice = createSlice({
       state.error = null;
       state.loading = false;
       delete axiosInstance.defaults.headers.common.Authorization;
-
-      console.log(axiosInstance.defaults.headers.common.Authorization);
+      // console.log(axiosInstance.defaults.headers.common.Authorization);
     },
     changeAvatarSuccess: (state, action: PayloadAction<any>) => {
       state.user = action.payload;
@@ -70,6 +69,13 @@ export const authSlice = createSlice({
     },
     updateProfileSuccess: (state, action: PayloadAction<any>) => {
       state.user = action.payload;
+      state.error = null;
+      state.loading = false;
+    },
+    changePasswordSuccess: (state, action: PayloadAction<any>) => {
+      state.user = action.payload.user;
+      AsyncStorage.setItem("accessToken", action.payload.accessToken);
+      axiosInstance.defaults.headers.common.Authorization = `Bearer ${action.payload.accessToken}`;
       state.error = null;
       state.loading = false;
     },
@@ -85,6 +91,7 @@ export const {
   registerSuccess,
   changeAvatarSuccess,
   updateProfileSuccess,
+  changePasswordSuccess,
 } = authSlice.actions;
 export const selectUser = (state: any) => state.auth.user;
 export const selectAccessToken = (state: any) => state.auth.accessToken;
@@ -269,3 +276,26 @@ export const deleteDeliveryAddress = (id: string) => async (dispatch: any) => {
     dispatch(hasError("Something went wrong"));
   }
 };
+
+export const changePassword =
+  (oldPassword: string, newPassword: string) => async (dispatch: any) => {
+    try {
+      dispatch(startLoading());
+      const response = await axiosInstance.put("/user/change-password", {
+        oldPassword,
+        newPassword,
+      });
+      if (response.data.message) {
+        dispatch(hasError(response.data.message));
+        return;
+      }
+      if (response.data) {
+        dispatch(hasSuccess("Password changed successfully"));
+        dispatch(changePasswordSuccess(response.data));
+      } else {
+        dispatch(hasError("Something went wrong"));
+      }
+    } catch (error) {
+      dispatch(hasError("Something went wrong"));
+    }
+  };

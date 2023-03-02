@@ -7,6 +7,7 @@ interface SingleBookFotterProps {
   quantity: number;
   setQuantity: (quantity: number) => void;
   onAddToCart: () => void;
+  onBuyNow: () => void;
 }
 
 const SingleBookFotter = ({
@@ -14,6 +15,7 @@ const SingleBookFotter = ({
   quantity,
   setQuantity,
   onAddToCart,
+  onBuyNow,
 }: SingleBookFotterProps) => {
   return (
     <View style={styles.container}>
@@ -49,7 +51,7 @@ const SingleBookFotter = ({
       </View>
       <View style={styles.buyNow}>
         {/* Buy now */}
-        <TouchableOpacity>
+        <TouchableOpacity onPress={onBuyNow}>
           <Text style={styles.buyNowText}>Mua ngay</Text>
         </TouchableOpacity>
       </View>

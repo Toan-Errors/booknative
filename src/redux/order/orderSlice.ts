@@ -1,5 +1,5 @@
-import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {OrderState} from "../../types/order/order-type";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { OrderState } from "../../types/order/order-type";
 import axiosInstance from "../../utils/axios";
 
 type initialStateType = {
@@ -41,12 +41,8 @@ export const orderSlice = createSlice({
   },
 });
 
-export const {
-  startLoading,
-  hasError,
-  setOrdersSuccess,
-  setOrderSuccess,
-} = orderSlice.actions;
+export const { startLoading, hasError, setOrdersSuccess, setOrderSuccess } =
+  orderSlice.actions;
 export default orderSlice.reducer;
 
 export const fetchOrders = () => async (dispatch: any) => {
@@ -57,4 +53,4 @@ export const fetchOrders = () => async (dispatch: any) => {
   } catch (error) {
     dispatch(hasError("Something went wrong"));
   }
-}
+};
