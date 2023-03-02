@@ -1,13 +1,18 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React from "react";
-import { useAppDispatch } from "../../../hooks/useAppDispatch";
+import { useAppDispatch, useAppSelector } from "../../../hooks/useAppDispatch";
 import { logout } from "../../../redux/auth/authSlice";
 
 const LogoutProfile = () => {
   const dispatch = useAppDispatch();
+  const { user } = useAppSelector((state) => state.auth);
+
+  // console.log("user", user);
 
   const onLogout = () => {
     dispatch(logout());
+    // Reload app
+    // window.location.reload();
   };
 
   return (

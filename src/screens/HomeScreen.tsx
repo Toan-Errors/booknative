@@ -15,7 +15,7 @@ import HomeSlider from "../components/Slider/HomeSlider";
 import { Ionicons } from "@expo/vector-icons";
 import Menu from "../components/Menu";
 import ListBook from "../components/Book/ListBook";
-import { getCart } from "../redux/cart/cartSlice";
+import { clearCart, getCart } from "../redux/cart/cartSlice";
 import { authenticate } from "../redux/auth/authSlice";
 import Loading from "../components/Loading";
 import { fetchWishlists } from "../redux/wishlist/wishlistSlice";
@@ -49,6 +49,8 @@ export default function HomeScreen() {
   useEffect(() => {
     if (user) {
       dispatch(getCart());
+    } else {
+      dispatch(clearCart());
     }
   }, [user]);
 

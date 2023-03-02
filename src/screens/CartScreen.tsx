@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, ScrollView, Alert } from "react-native";
 import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/useAppDispatch";
 import Cart from "../components/Cart/ListCart";
-import { getCart } from "../redux/cart/cartSlice";
+import { clearCart, getCart } from "../redux/cart/cartSlice";
 import TotalView from "../components/Cart/TotalView";
 import { addItemsToCheckout } from "../redux/checkout/checkoutSlice";
 import { useNavigation } from "@react-navigation/native";
@@ -29,12 +29,9 @@ const CartScreen = () => {
   }, [cartsSelected]);
 
   useEffect(() => {
+    if (!user) dispatch(clearCart());
     dispatch(getCart());
-  }, []);
-
-  useEffect(() => {
-    dispatch(authenticate());
-  }, []);
+  }, [user]);
 
   const onCheckout = () => {
     if (!user) {

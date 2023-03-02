@@ -79,6 +79,15 @@ export const cartSlice = createSlice({
       const ids = action.payload;
       state.items = state.items.filter((item) => !ids.includes(item._id));
     },
+
+    clearCart: (state) => {
+      state.items = [];
+      state.totalQuantity = 0;
+      state.changed = false;
+      state.loading = false;
+      state.error = null;
+      state.success = null;
+    },
   },
 });
 
@@ -90,6 +99,7 @@ export const {
   addItemToCartSuccess,
   changeQuantitySuccess,
   removeItemFromCartSuccess,
+  clearCart,
 } = cartSlice.actions;
 export const selectCartItems = (state: any) => state.cart.items;
 export const selectCartTotalQuantity = (state: any) => state.cart.totalQuantity;

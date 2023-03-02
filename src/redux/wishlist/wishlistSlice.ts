@@ -71,6 +71,7 @@ export const fetchWishlists = () => async (dispatch: any) => {
   try {
     dispatch(startLoading());
     const response = await axiosInstance.get("/wishlist/user");
+    // console.log(response.data);
     dispatch(getWishlistsSuccess(response.data));
   } catch (error) {
     dispatch(hasError("Something went wrong!"));

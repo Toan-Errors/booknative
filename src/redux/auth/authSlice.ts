@@ -33,6 +33,7 @@ export const authSlice = createSlice({
       state.loading = false;
       state.user = null;
       AsyncStorage.removeItem("accessToken");
+      delete axiosInstance.defaults.headers.common.Authorization;
     },
     hasSuccess: (state, action: PayloadAction<any>) => {
       state.success = action.payload;
@@ -41,15 +42,26 @@ export const authSlice = createSlice({
 
     loginSuccess: (state, action: PayloadAction<any>) => {
       state.user = action.payload.user;
+      axiosInstance.defaults.headers.common.Authorization = `Bearer ${action.payload.accessToken}`;
       AsyncStorage.setItem("accessToken", action.payload.accessToken);
       state.error = null;
       state.loading = false;
     },
     registerSuccess: (state, action: PayloadAction<any>) => {
       state.user = action.payload.user;
+      axiosInstance.defaults.headers.common.Authorization = `Bearer ${action.payload.accessToken}`;
       AsyncStorage.setItem("accessToken", action.payload.accessToken);
       state.error = null;
       state.loading = false;
+    },
+    logoutSuccess: (state) => {
+      state.user = null;
+      AsyncStorage.removeItem("accessToken");
+      state.error = null;
+      state.loading = false;
+      delete axiosInstance.defaults.headers.common.Authorization;
+
+      console.log(axiosInstance.defaults.headers.common.Authorization);
     },
     changeAvatarSuccess: (state, action: PayloadAction<any>) => {
       state.user = action.payload;
@@ -69,6 +81,7 @@ export const {
   hasError,
   hasSuccess,
   loginSuccess,
+  logoutSuccess,
   registerSuccess,
   changeAvatarSuccess,
   updateProfileSuccess,
@@ -120,7 +133,7 @@ export const register = (data: RegisterType) => async (dispatch: any) => {
 export const logout = () => async (dispatch: any) => {
   try {
     dispatch(startLoading());
-    dispatch(hasError(null));
+    dispatch(logoutSuccess());
   } catch (error) {
     console.log(error);
   }
