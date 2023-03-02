@@ -10,6 +10,7 @@ import Book from "./Book";
 import { useNavigation } from "@react-navigation/native";
 import { BookState } from "../../types/book/book-type";
 import { useAppSelector } from "../../hooks/useAppDispatch";
+import RNBounceable from "@freakycoder/react-native-bounceable";
 
 interface Props {
   books: BookState[];
@@ -20,19 +21,27 @@ const ListBook: React.FC<Props> = ({ books, title }) => {
   const navigation = useNavigation();
   const { wishlists } = useAppSelector((state) => state.wishlist);
 
+  const isWishlisted = (id: string) => {
+    return wishlists.some((wishlist) => wishlist.bookId === id);
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{title}</Text>
       <FlatList
         data={books}
         renderItem={({ item, index }) => (
-          <TouchableOpacity
+          <RNBounceable
             onPress={() => {
               navigation.navigate("SingleBook", { id: item._id });
             }}
           >
-            <Book key={index} book={item} />
-          </TouchableOpacity>
+            <Book
+              isFavorite={isWishlisted(item?._id)}
+              key={index}
+              book={item}
+            />
+          </RNBounceable>
         )}
         keyExtractor={(item) => item._id}
         numColumns={1}

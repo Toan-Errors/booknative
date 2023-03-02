@@ -1,35 +1,71 @@
 import { Alert, Button, StyleSheet, Text, View } from "react-native";
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { TextInput } from "react-native-paper";
 import {
   useAppDispatch,
   useAppSelector,
 } from "../../../../hooks/useAppDispatch";
-import { addDeliveryAddress, hasError } from "../../../../redux/auth/authSlice";
+import {
+  addDeliveryAddress,
+  hasError,
+  updateDeliveryAddress,
+} from "../../../../redux/auth/authSlice";
+import { useRoute } from "@react-navigation/native";
 
 const AddDelivery = () => {
   const { error, success } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
+  const route = useRoute();
+  const params: any = route.params;
+  const { user } = useAppSelector((state) => state.auth);
+  const addresses = user?.deliveryAddresses;
+  const [address, setAddress] = React.useState<any>(null);
+
+  useEffect(() => {
+    if (params?.id) {
+      const address = addresses?.find((item) => item.id === params.id);
+      setAddress(address);
+    }
+  }, []);
+
+  const defaultValues = useMemo(
+    () => ({
+      name: address?.name || "",
+      phone: address?.phone || "",
+      address: address?.address || "",
+      wards: address?.wards || "",
+      district: address?.district || "",
+      city: address?.city || "",
+      country: address?.country || "",
+    }),
+    [address]
+  );
 
   const {
     control,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
-    defaultValues: {
-      name: "",
-      phone: "",
-      address: "",
-      wards: "",
-      district: "",
-      city: "",
-      country: "",
-    },
+    defaultValues,
   });
 
+  useEffect(() => {
+    if (params?.id && address) {
+      reset(defaultValues);
+    }
+    if (!params?.id) {
+      reset(defaultValues);
+    }
+  }, [address]);
+
   const onSubmit = (data: any) => {
-    dispatch(addDeliveryAddress(data));
+    if (params?.id) {
+      dispatch(updateDeliveryAddress(params?.id, data));
+    } else {
+      dispatch(addDeliveryAddress(data));
+    }
   };
 
   useEffect(() => {
@@ -160,7 +196,11 @@ const AddDelivery = () => {
       />
       {errors.country && <Text>This is required.</Text>}
 
-      <Button title="Submit" onPress={handleSubmit((data) => onSubmit(data))} />
+      {params?.id ? (
+        <Button title="Cập nhật" onPress={handleSubmit(onSubmit)} />
+      ) : (
+        <Button title="Thêm" onPress={handleSubmit(onSubmit)} />
+      )}
     </View>
   );
 };

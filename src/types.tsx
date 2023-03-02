@@ -70,7 +70,7 @@ export type SettingsParamList = {
 export type CheckoutParamList = {
   Home: undefined;
   SelectDelivery: undefined;
-  AddDelivery: undefined;
+  AddDelivery: { id: string | undefined };
   SelectShipping: undefined;
   SelectPayment: undefined;
 };

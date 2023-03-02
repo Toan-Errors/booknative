@@ -226,10 +226,13 @@ export const addDeliveryAddress =
   };
 
 export const updateDeliveryAddress =
-  (data: DeliveryAddressType) => async (dispatch: any) => {
+  (id: string, data: DeliveryAddressType) => async (dispatch: any) => {
     try {
       dispatch(startLoading());
-      const response = await axiosInstance.put("/user/delivery-address", data);
+      const response = await axiosInstance.put(
+        `/user/delivery-address/${id}`,
+        data
+      );
       if (response.data.message) {
         dispatch(hasError(response.data.message));
         return;

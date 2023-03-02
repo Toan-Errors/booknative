@@ -2,8 +2,8 @@ import { Image, StyleSheet, Text, View } from "react-native";
 import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../hooks/useAppDispatch";
 import { fetchOrders } from "../../../redux/order/orderSlice";
-import { formatVND } from "../../../utils/formatNumber";
 import RNBounceable from "@freakycoder/react-native-bounceable";
+import { Price, TotalPrice } from "../../../utils/formatPrice";
 
 const OrderSetting = () => {
   const { orders } = useAppSelector((state) => state.order);
@@ -30,24 +30,39 @@ const OrderSetting = () => {
               borderColor: "#000",
             }}
           >
-            <View style={{}}>
+            <View
+              style={{
+                flexDirection: "column",
+                justifyContent: "space-between",
+              }}
+            >
               <View
                 style={{
                   flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "flex-end",
+                  justifyContent: "space-around",
+                  alignItems: "flex-start",
                   backgroundColor: "#fff",
                 }}
               >
-                <View>
-                  <Text>
-                    Id: {order?._id.substring(0, 5)}...
-                    {order?._id.substring(20)}
-                  </Text>
-                </View>
-                <View>
-                  <Text>{order?.status}</Text>
-                </View>
+                <Text
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: 14,
+                  }}
+                >
+                  Id: {order?._id.substring(0, 5)}...
+                  {order?._id.substring(20)}
+                </Text>
+                <Text
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: 14,
+                    color: "red",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  {order?.status}
+                </Text>
               </View>
               {order?.items.map((item) => (
                 <View
@@ -59,7 +74,6 @@ const OrderSetting = () => {
                     justifyContent: "space-between",
                     alignItems: "flex-start",
                     backgroundColor: "#fff",
-                    width: "100%",
                   }}
                 >
                   <View>
@@ -70,29 +84,23 @@ const OrderSetting = () => {
                   </View>
                   <View
                     style={{
-                      marginHorizontal: 10,
-                      marginVertical: 5,
+                      paddingLeft: 10,
                       flexDirection: "column",
+                      justifyContent: "flex-start",
+                      width: "100%",
+                      alignItems: "flex-start",
                     }}
                   >
-                    <View
+                    <Text
                       style={{
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                        alignItems: "flex-start",
-                        backgroundColor: "#fff",
+                        fontWeight: "bold",
+                        fontSize: 14,
+                        color: "#000",
+                        width: 250,
                       }}
                     >
-                      <Text
-                        style={{
-                          fontWeight: "bold",
-                          fontSize: 14,
-                          color: "#000",
-                        }}
-                      >
-                        {item.title}
-                      </Text>
-                    </View>
+                      {item.title}
+                    </Text>
                     <View
                       style={{
                         flexDirection: "row",
@@ -102,7 +110,7 @@ const OrderSetting = () => {
                       }}
                     >
                       <View>
-                        <Text>{formatVND(item?.price_sale)}</Text>
+                        <Text>{Price(item?.price, item?.price_sale)}</Text>
                       </View>
                       <View>
                         <Text>Quantity: {item.quantity}</Text>
@@ -110,7 +118,12 @@ const OrderSetting = () => {
                     </View>
                     <View>
                       <Text>
-                        Sum: {formatVND(item?.price_sale * item?.quantity)}
+                        Tổng:{" "}
+                        {TotalPrice(
+                          item?.price,
+                          item?.price_sale,
+                          item?.quantity
+                        )}
                       </Text>
                     </View>
                     <View

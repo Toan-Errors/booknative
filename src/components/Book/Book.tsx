@@ -6,9 +6,10 @@ import { Ionicons } from "@expo/vector-icons";
 
 interface Props {
   book: BookState;
+  isFavorite: boolean;
 }
 
-const Book: React.FC<Props> = ({ book }) => {
+const Book: React.FC<Props> = ({ book, isFavorite }) => {
   const isSale = book.price_sale !== book.price;
 
   return (
@@ -43,8 +44,8 @@ const Book: React.FC<Props> = ({ book }) => {
         <Ionicons
           name="ios-heart"
           size={20}
-          // color={book.isFavorite ? "red" : "#aaa"}
-          color={"#aaa"}
+          color={isFavorite ? "red" : "#aaa"}
+          // color={"#aaa"}
         />
       </View>
       <Image

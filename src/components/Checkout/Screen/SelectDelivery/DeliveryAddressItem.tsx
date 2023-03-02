@@ -5,6 +5,7 @@ import { Ionicons } from "@expo/vector-icons";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import RNBounceable from "@freakycoder/react-native-bounceable";
 import { RadioButton } from "react-native-paper";
+import { useNavigation } from "@react-navigation/native";
 
 interface Props {
   address: DeliveryAddressType;
@@ -18,6 +19,7 @@ const DeliveryAddressItem = ({
   selectAddress,
 }: Props) => {
   const isChecked = address.id === selectAddress.id;
+  const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
@@ -55,6 +57,12 @@ const DeliveryAddressItem = ({
           size={24}
           color="black"
           style={{ marginRight: 10 }}
+          onPress={() => {
+            navigation.navigate("Checkout", {
+              screen: "AddDelivery",
+              params: { id: address.id },
+            } as any);
+          }}
         />
       </RNBounceable>
     </View>
