@@ -122,6 +122,10 @@ export const getCart = () => async (dispatch: any) => {
 
 export const addToCart = (item: CartItem) => async (dispatch: any) => {
   try {
+    if (axiosInstance.defaults.headers.common["Authorization"] === undefined) {
+      dispatch(hasError("Login"));
+      return;
+    }
     dispatch(startLoading());
     const response = await axiosInstance.post("/cart", item);
     if (response.data) {
