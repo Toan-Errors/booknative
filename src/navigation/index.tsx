@@ -141,7 +141,7 @@ function BottomTabNavigator() {
         name="Browse"
         component={BrowseScreen}
         options={{
-          title: "Danh mục",
+          title: "Toàn bộ sách",
           tabBarIcon: ({ color }) => <TabBarIcon name="book" color={color} />,
         }}
       />

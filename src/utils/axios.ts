@@ -3,7 +3,7 @@ import { HOST_API } from "../constants/Config";
 
 const axiosInstance = axios.create({
   baseURL: HOST_API,
-  timeout: 10000,
+  timeout: 1000,
 });
 
 axiosInstance.interceptors.request.use(

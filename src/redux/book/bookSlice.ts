@@ -4,6 +4,7 @@ import axiosInstance from "../../utils/axios";
 
 type initialStateType = {
   books: BookState[];
+  allBooks: BookState[];
   book: BookSingleState | null;
   loading: boolean;
   error: string | null;
@@ -11,6 +12,7 @@ type initialStateType = {
 
 const initialState: initialStateType = {
   books: [],
+  allBooks: [],
   book: null,
   loading: false,
   error: null,

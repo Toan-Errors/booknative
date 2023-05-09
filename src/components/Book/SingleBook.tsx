@@ -32,6 +32,7 @@ const SingleBook = () => {
   const { wishlist } = useAppSelector((state) => state.wishlist);
   const [quantity, setQuantity] = React.useState(1);
   const { error, success } = useAppSelector((state) => state.cart);
+  const { user } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
     dispatch(fetchBook(params.id));
@@ -58,6 +59,11 @@ const SingleBook = () => {
   };
 
   const onBuyNow = async () => {
+    if (!user) {
+      Alert.alert("Thông báo: ", "Bạn cần đăng nhập để thanh toán");
+      navigation.navigate("Auth");
+      return;
+    }
     const item = {
       bookId: book?._id || "",
       title: book?.title || "",
@@ -81,6 +87,11 @@ const SingleBook = () => {
 
   useEffect(() => {
     if (error) {
+      if (error === "Login") {
+        navigation.navigate("Auth");
+        dispatch(hasError(null));
+        return;
+      }
       Alert.alert("Error", error, [{ text: "OK" }]);
       dispatch(hasError(null));
       return;

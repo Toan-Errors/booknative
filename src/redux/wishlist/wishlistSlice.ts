@@ -1,3 +1,4 @@
+import { Alert } from "react-native";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { WishlistState } from "../../types/wishlist/wishlist-type";
 import axiosInstance from "../../utils/axios";
@@ -71,7 +72,6 @@ export const fetchWishlists = () => async (dispatch: any) => {
   try {
     dispatch(startLoading());
     const response = await axiosInstance.get("/wishlist/user");
-    // console.log(response.data);
     dispatch(getWishlistsSuccess(response.data));
   } catch (error) {
     dispatch(hasError("Something went wrong!"));
@@ -81,6 +81,10 @@ export const fetchWishlists = () => async (dispatch: any) => {
 export const wishlistLike = (bookId: string) => async (dispatch: any) => {
   try {
     dispatch(startLoading());
+    if (axiosInstance.defaults.headers.common["Authorization"] === undefined) {
+      Alert.alert("Please login to use this feature");
+      return;
+    }
     const response = await axiosInstance.post("/wishlist", { bookId });
     dispatch(updateLike(response.data));
   } catch (error) {

@@ -3,7 +3,7 @@ import React from "react";
 import * as ImagePicker from "expo-image-picker";
 import { Ionicons } from "@expo/vector-icons";
 import axios from "axios";
-import { useAppDispatch } from "../../../hooks/useAppDispatch";
+import { useAppDispatch, useAppSelector } from "../../../hooks/useAppDispatch";
 import { HOST_API_IMAGE } from "../../../constants/Config";
 
 interface ChangeAvatarProps {
