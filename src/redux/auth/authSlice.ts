@@ -123,7 +123,7 @@ export const register = (data: RegisterType) => async (dispatch: any) => {
   try {
     dispatch(startLoading());
     const response = await axiosInstance.post("/auth/register", data);
-    if (!response.data.user) {
+    if (response.data.user) {
       dispatch(registerSuccess(response.data));
     } else {
       if (response.data.message) {
